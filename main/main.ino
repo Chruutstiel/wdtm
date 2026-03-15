@@ -4,6 +4,10 @@
 
 BLEMIDI_CREATE_DEFAULT_INSTANCE();
 
+// A-Minor: A B C D E F G A
+const int loopedNotesMidi[] = {57, 59, 60, 62, 64, 62, 60, 59};
+const String loopedNotesHuman[] = {"A", "B", "C", "D", "E", "D", "C", "B"}; 
+const int loopLength = 8;
 
 void setup() {
   Serial.begin(115200);
@@ -15,10 +19,15 @@ void setup() {
 void loop() {
   MIDI.read();
 
-  // Beispiel: Note C4 alle 1 Sekunde senden
-  MIDI.sendNoteOn(60, 127, 1);   // Note, Velocity, Kanal
-  delay(500);
-  MIDI.sendNoteOff(60, 0, 1);
-  Serial.println("Düdeldü.");
-  delay(500);
+  if (/* connected */ true) {
+    for (int i = 0; i < loopLength; i++) {
+      MIDI.sendNoteOn(loopedNotesMidi[i], 127, 1);
+      Serial.println(loopedNotesHuman[i]);
+      delay(400);
+      MIDI.sendNoteOff(loopedNotesMidi[i], 0, 1);
+      delay(100);
+    }
+    //delay(00); // pause before repetition 
+  }
+
 }
